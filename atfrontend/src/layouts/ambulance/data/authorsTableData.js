@@ -50,17 +50,6 @@ export default function data(Ambulances) {
     getAllAmbulance();
   },[]);
 
-  // async function getHospitalAmbulances(id,name){
-  //   try{
-  //     const hospitalambulances_data= await axios.get(`http://127.0.0.1:8000/hospitalambulances/${id}`);
-  //     add_hospitalAmbulances(hospitalambulances_data.data)
-  //     add_hospitalName(name)
-  //     console.log(HospitalAmbulances);
-  //   }catch(error){
-  //     console.log(error);
-  //   }
-  // }
-
   const Author = ({ image, name, email,id }) => (
     // <div onClick={()=>getAmbulancesBook(id)}>
     //   <Link to="/hospitalambulances/">

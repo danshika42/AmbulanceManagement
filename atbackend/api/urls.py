@@ -9,7 +9,4 @@ urlpatterns=[
     path('<pk>/updatehospital/',views.UpdateHospitalList.as_view(),name='updatehospital'),
     path('hospitalambulances/<int:id>',views.GetHospitalAmbulance),
     path('createuser/',views.CreateUser),
-    path('authenticateuser/',views.AuthenticateUser),
-    path('getloggedinuser/',views.GetLoggedInUser),
-    path('login/',views.login_view),
 ]

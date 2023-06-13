@@ -5,7 +5,8 @@ export const initialState = {
   HospitalAmbulances: [],
   search: "",
   nameReducer: "",
-  isLoggedIn: false,
+  AuthToken:{},
+  User:{},
 };
 
 const reducer = (state, action) => {
@@ -30,27 +31,16 @@ const reducer = (state, action) => {
           ...state,
           HospitalName: action.HospitalName_data,
     };
-    // case "UPDATE_SEARCH":
-    //   console.log("update");
-    //   return {
-    //     ...state,
-    //     search: action.value,
-    //   };
-    // case "CLEAR_SEARCH":
-    //   return {
-    //     ...state,
-    //     search: "",
-    //   };
-    // case "UPDATE_NAME":
-    //   return {
-    //     ...state,
-    //     nameReducer: action.name,
-    //   };
-    // case "SET_LOGGEDIN":
-    //   return {
-    //     ...state,
-    //     isLoggedIn: true,
-    //   };
+    case "ADD_AUTHTOKEN":
+      return {
+        ...state,
+        AuthToken: action.AuthToken_data,
+      };
+    case "ADD_USER":
+      return {
+        ...state,
+        User: action.User_data,
+      };
     default:
       return state;
   }

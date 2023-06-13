@@ -46,7 +46,7 @@ function Cover() {
     axios.post('http://127.0.0.1:8000/createuser/', data)
       .then(res => {
         if(res.data.msg==null){
-          window.location.href = '/dashboard/'
+          window.location.href = '/authentication/sign-in/'
         }
         setMsg(res.data.msg);
       })

@@ -40,26 +40,61 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
-import axios from "axios";
 import Error from "../sign-up/Error";
+import jwtDecode from "jwt-decode";
+import { useStateValue } from "ContextProvider/StateContext";
 
 function Basic() {
 
   const [msg,setMsg]=useState({});
-  console.log(msg);
+
+  const [{AuthToken,User},dispatch]=useStateValue();
+
+  function add_AuthToken(data){
+    dispatch({
+      type:'ADD_AUTHTOKEN',
+      AuthToken_data:data
+    })
+  }
+
+  function add_User(data){
+    dispatch({
+      type:'ADD_USER',
+      User_data:data
+    })
+  }
  
-  function handleSubmit(event) {
-    event.preventDefault();
-    const data = new FormData(event.target); 
-    
-    axios.post('http://127.0.0.1:8000/authenticateuser/', data)
-      .then(res => {
-        if(res.data.msg==null){
-          window.location.href = '/dashboard/'
+ 
+  async function handleSubmit(e) {
+    e.preventDefault();
+    let response = await fetch('http://127.0.0.1:8000/userapi/token/',{
+        method:'POST',
+        headers:{
+           'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({
+            'username':e.target.username.value,
+            'password':e.target.password.value
+        })
+
+    });
+
+    let data=await response.json();
+
+    if(response.status===200){
+        add_User(jwtDecode(data.access));
+        add_AuthToken(data)
+        window.location.href='/dashboard/'
+    }else if(response.status===401){
+        const arr=[];
+        arr.push(data.detail);
+        const detaildata={
+          detail:arr
         }
-        setMsg(res.data.msg);
-      })
-      .catch(err => setMsg(err.response.data));
+        setMsg(detaildata)
+    }else{
+        setMsg(data);
+    }
   }
 
   return (
@@ -107,6 +142,7 @@ function Basic() {
               <MDInput type="password" label="Password" id="password" name="password" fullWidth />
             </MDBox>
             <Error res={msg?.password}/>
+            <Error res={msg?.detail}/>
             <MDBox mt={4} mb={1}>
               <MDButton type="submit" variant="gradient" color="info" fullWidth>
                 sign in

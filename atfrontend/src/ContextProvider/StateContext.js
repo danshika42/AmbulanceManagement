@@ -4,8 +4,9 @@ import { useLocalStorageReducer } from "./useLocalStorageReducer";
 export const StateContext=createContext();
 
 function StateContextProvider({reducer,children,initialState}){
+    
     return(
-        <StateContext.Provider value={useLocalStorageReducer('wishList',initialState,reducer)}>
+        <StateContext.Provider value={useLocalStorageReducer('dataList',initialState,reducer)}>
             {children}
         </StateContext.Provider> 
     )
