@@ -52,24 +52,73 @@ import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import AmbulancePage from "layouts/ambulancepage";
 import { useStateValue } from "ContextProvider/StateContext";
-
+import './index.css'
 
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
+import jwtDecode from "jwt-decode";
 
 // Images
 
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
-  const [{Ambulances,HospitalAmbulances,Hospitals, HospitalName}]=useStateValue();
+  const [{Ambulances,HospitalAmbulances,Hospitals, HospitalName,AuthToken,User},dispatchauth]=useStateValue();
+ 
+  function add_AuthToken(data){
+    dispatchauth({
+      type:'ADD_AUTHTOKEN',
+      AuthToken_data:data
+    })
+  }
+
+  function add_User(data){
+    dispatchauth({
+      type:'ADD_USER',
+      User_data:data
+    })
+  }
+
+  async function UpdateToken() {
+    console.log('updated');
+    let response = await fetch('http://127.0.0.1:8000/userapi/token/refresh/',{
+        method:'POST',
+        headers:{
+           'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({
+            'refresh':AuthToken?.refresh,
+        })
+
+    });
+
+    let data=await response.json();
+    console.log("data",data);
+    console.log("response",response);
+
+    if(response.status===200){
+        add_User(jwtDecode(data.access));
+        add_AuthToken(data)
+    }else{
+      add_User({});
+      add_AuthToken({});
+    }
+  }
+
+  // useEffect(()=>{
+  //   setTimeout(() => {
+  //     console.log('This message will be logged after 2 seconds.');
+  //   }, 2000);
+  // },[])
+
   const routes = [
     {
       type: "collapse",
       name: "Dashboard",
       key: "dashboard",
-      icon: <Icon fontSize="small">dashboard</Icon>,
+      icon: <Icon fontSize="small">dashboard</Icon>, 
       route: "/dashboard",
       component: <Dashboard />,
     },
@@ -138,6 +187,13 @@ export default function App() {
       route: "/authentication/sign-up",
       component: <SignUp />,
     },
+    {
+    
+      name: "Ambulance Page",
+      key: "ambulance-page",
+      route: "/ambulancepage",
+      component: <AmbulancePage />,
+    },
   ];
   const {
     miniSidenav,
@@ -153,7 +209,6 @@ export default function App() {
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
 
-  // Cache for the rtl
   useMemo(() => {
     const cacheRtl = createCache({
       key: "rtl",
@@ -200,7 +255,17 @@ export default function App() {
       }
 
       if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
+        if(Object.keys(User).length===0){
+          if(route.key!='AddHospitals' && route.key!='AddAmbulance' && route.key!='profile'){
+            return <Route exact path={route.route} element={route.component} key={route.key} />;
+          }
+        }else if(route.key!='sign-in' && route.key!='sign-up'){
+          if(User?.is_admin ){
+            return <Route exact path={route.route} element={route.component} key={route.key} />;
+          }else if(route.key!='AddHospitals' && route.key!='AddAmbulance'){
+            return <Route exact path={route.route} element={route.component} key={route.key} />;
+          }
+        }
       }
 
       return null;
@@ -230,6 +295,17 @@ export default function App() {
     </MDBox>
   );
 
+  var newroutes=routes;
+  if(Object.keys(User).length===0){
+    newroutes=routes.filter(obj=>(obj.key!=='AddHospitals' && obj.key!=='AddAmbulance' && obj.key!=='profile'));
+  }else{
+    if(User?.is_admin!=true){
+      newroutes=routes.filter(obj=>(obj.key!=='AddHospitals' && obj.key!=='AddAmbulance' && obj.key!=='sign-in' && obj.key!=='sign-up'));
+    }else{
+      newroutes=routes.filter(obj=>(obj.key!=='sign-in' && obj.key!=='sign-up'));
+    }
+  }
+  
   return direction === "rtl" ? (
     <CacheProvider value={rtlCache}>
       <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
@@ -240,7 +316,7 @@ export default function App() {
               color={sidenavColor}
               // brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
               brandName="Ambulance Tracker"
-              routes={routes}
+              routes={newroutes}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
             />
@@ -264,7 +340,7 @@ export default function App() {
             color={sidenavColor}
             // brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
             brandName="Ambulance Tracker"
-            routes={routes}
+            routes={newroutes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />

@@ -52,7 +52,7 @@ export default function data(Ambulances) {
 
   const Author = ({ image, name, email,id }) => (
     // <div onClick={()=>getAmbulancesBook(id)}>
-    //   <Link to="/hospitalambulances/">
+      <Link to="/ambulancepage/">
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDAvatar src={image} name={name} size="sm" />
           <MDBox ml={2} lineHeight={1}>
@@ -62,7 +62,7 @@ export default function data(Ambulances) {
             <MDTypography variant="caption">{email}</MDTypography>
           </MDBox>
         </MDBox>
-    //   </Link>
+     </Link>
     // </div>
   );
 

@@ -1,13 +1,10 @@
-from .serializers import HospitalSerializer, AmbulanceSerializer
+from .serializers import HospitalSerializer, AmbulanceSerializer,UserSerializer
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView
 from .models import Hospital, Ambulance
 from django.http import JsonResponse
 from rest_framework.response import Response
-from .forms import SignUpForm, LoginForm
+from .forms import SignUpForm
 from rest_framework.decorators import api_view
-from django.contrib.auth import authenticate, login
-from django.shortcuts import render,redirect
-
 
 class HospitalList(ListAPIView):
     queryset = Hospital.objects.all()
@@ -40,11 +37,14 @@ def CreateUser(request):
     return Response({'msg':msg })
 
 
+
 class UpdateHospitalList(UpdateAPIView):
     queryset=Hospital.objects.all()
     serializer_class=HospitalSerializer
+
 
 def GetHospitalAmbulance(request,id):
     ambulance_list=Ambulance.objects.filter(ambulance_hospital=id)
     serializer = AmbulanceSerializer(ambulance_list, many=True)
     return JsonResponse(serializer.data, safe=False)
+

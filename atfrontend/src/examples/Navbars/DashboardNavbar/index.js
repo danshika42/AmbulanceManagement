@@ -52,6 +52,7 @@ import {
   setMiniSidenav,
   setOpenConfigurator,
 } from "context";
+import { useStateValue } from "ContextProvider/StateContext";
 import Logout from "./Logout";
 
 
@@ -62,6 +63,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
+  const [{User}]=useStateValue();
   useEffect(() => {
     // Setting the navbar type
     if (fixedNavbar) {
@@ -142,29 +144,31 @@ function DashboardNavbar({ absolute, light, isMini }) {
             </MDBox>
            
             <MDBox color={light ? "white" : "inherit"}>
-              <Link to="/authentication/sign-in/basic">
+              <Link to="/profile">
                 <IconButton sx={navbarIconButton} size="small" disableRipple>
                   <Icon sx={iconsStyle}>account_circle</Icon>
                 </IconButton>
               </Link>
-              <IconButton
-                size="small"
-                disableRipple
-                color="inherit"
-                sx={navbarMobileMenu}
-                onClick={handleMiniSidenav}
-              >
-                <Icon sx={iconsStyle} fontSize="medium">
-                  {miniSidenav ? "menu_open" : "menu"}
-                </Icon>
-              </IconButton>
+                <IconButton
+                  size="small"
+                  disableRipple
+                  color="inherit"
+                  sx={navbarMobileMenu}
+                  onClick={handleMiniSidenav}
+                >
+                  <Icon sx={iconsStyle} fontSize="medium">
+                    {miniSidenav ? "menu_open" : "menu"}
+                  </Icon>
+                </IconButton>
               {renderMenu()}
             </MDBox>
             <MDBox pr={1}>
-              <Logout/>
+              {
+                (Object.keys(User).length!==0)?<Logout/>:<Link to="/authentication/sign-in">Sign In</Link>
+              }
             </MDBox>
           </MDBox>
-        )}
+        )} 
       </Toolbar>
     </AppBar>
   );

@@ -11,7 +11,8 @@ const useStyles = makeStyles({
     marginBottom: '12px',
   },
   fweight:{
-    fontWeight: 400,
+    fontWeight: 200,
+    fontSize:"0.69rem",
   }
 })
 

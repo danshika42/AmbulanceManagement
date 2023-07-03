@@ -66,8 +66,8 @@ export default function data() {
   async function getHospitalAmbulances(id,name){
     try{
       const hospitalambulances_data= await axios.get(`http://127.0.0.1:8000/hospitalambulances/${id}`);
-      add_hospitalAmbulances(hospitalambulances_data.data)
-      add_hospitalName(name)
+      add_hospitalAmbulances(hospitalambulances_data.data);
+      add_hospitalName(name);
     }catch(error){
       console.log(error);
     }

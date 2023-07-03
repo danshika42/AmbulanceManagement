@@ -18,6 +18,10 @@ class LoginForm(forms.Form):
         )
     )
 
+class UserUpdateForm(forms.Form):
+    class Meta:
+        model=User
+        fields = ('email','first_name','last_name')
 
 class SignUpForm(UserCreationForm):
     username = forms.CharField(
