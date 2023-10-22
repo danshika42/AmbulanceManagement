@@ -22,9 +22,10 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import { useStateValue } from 'ContextProvider/StateContext';
 
 
-const steps = ['Address', 'Payment details', 'Review your order'];
+const steps = ['Address', 'Payment details', 'Review your booking'];
 
 function getStepContent(step) {
     switch (step) {
@@ -43,7 +44,7 @@ function getStepContent(step) {
 
 export default function AmbulancePage() {
     const [activeStep, setActiveStep] = React.useState(0);
-
+    const [{BookAmbulance},dispatch]=useStateValue();
     const handleNext = () => {
         setActiveStep(activeStep + 1);
     };
@@ -74,28 +75,27 @@ export default function AmbulancePage() {
                                 </MDTypography>
                             </MDBox>
                             <MDBox className='w-[60%!important] m-auto' pt={3}>
-                                        <Stepper className='mt-8 mb-8' activeStep={activeStep} sx={{ pt: 3, pb: 3,pr:2,pl:2 }}>
-                                            {steps.map((label) => (
-                                                <Step  key={label}>
-                                                    <StepLabel>{label}</StepLabel>
-                                                </Step>
-                                            ))}
-                                        </Stepper>
+                                        
                                         {activeStep === steps.length ? (
-                                            <React.Fragment>
+                                            <div className='p-20'>
                                                 <Typography variant="h5" gutterBottom>
-                                                    Thank you for your order.
+                                                Thank you for booking our ambulance service.
                                                 </Typography>
-                                                <Typography variant="subtitle1">
-                                                    Your order number is #2001539. We have emailed your order
-                                                    confirmation, and will send you an update when your order has
-                                                    shipped.
+                                                <Typography  style={{ fontSize: '0.9rem' }} variant="body2">
+                                                   Your request has been confirmed. Your order number is <strong>#2001539</strong> . The ambulance will arrive in <strong>{BookAmbulance.ambulance_time}</strong>. For any immediate assistance, you can contact our driver at <strong>{BookAmbulance.ambulance_drivernumber}</strong>. Your safety is our priority, and we're here to help.
                                                 </Typography>
-                                            </React.Fragment>
+                                            </div>
                                         ) : (
                                             <React.Fragment>
+                                                <Stepper className='mt-8 mb-8' activeStep={activeStep} sx={{ pt: 3, pb: 3,pr:2,pl:2 }}>
+                                                    {steps.map((label) => (
+                                                        <Step  key={label}>
+                                                            <StepLabel>{label}</StepLabel>
+                                                        </Step>
+                                                    ))}
+                                                </Stepper>
                                                 {getStepContent(activeStep)}
-                                                <Box className='mb-8' sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                                <Box className='m-6' sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                                     {activeStep !== 0 && (
                                                         <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
                                                             Back
@@ -108,7 +108,7 @@ export default function AmbulancePage() {
                                                         style={{'color':'white'}}
                                                         sx={{ mt: 3, ml: 1 }}
                                                     >
-                                                        {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                                                        {activeStep === steps.length - 1 ? 'Confirm' : 'Next'}
                                                     </Button>
                                                 </Box>
                                             </React.Fragment>

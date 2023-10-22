@@ -1,17 +1,4 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
 
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 
 import { useState, useEffect, useMemo } from "react";
 
@@ -64,55 +51,11 @@ import jwtDecode from "jwt-decode";
 
 
 export default function App() {
+  
   const [controller, dispatch] = useMaterialUIController();
-  const [{Ambulances,HospitalAmbulances,Hospitals, HospitalName,AuthToken,User},dispatchauth]=useStateValue();
  
-  function add_AuthToken(data){
-    dispatchauth({
-      type:'ADD_AUTHTOKEN',
-      AuthToken_data:data
-    })
-  }
-
-  function add_User(data){
-    dispatchauth({
-      type:'ADD_USER',
-      User_data:data
-    })
-  }
-
-  async function UpdateToken() {
-    console.log('updated');
-    let response = await fetch('http://127.0.0.1:8000/userapi/token/refresh/',{
-        method:'POST',
-        headers:{
-           'Content-Type': 'application/json',
-        },
-        body:JSON.stringify({
-            'refresh':AuthToken?.refresh,
-        })
-
-    });
-
-    let data=await response.json();
-    console.log("data",data);
-    console.log("response",response);
-
-    if(response.status===200){
-        add_User(jwtDecode(data.access));
-        add_AuthToken(data)
-    }else{
-      add_User({});
-      add_AuthToken({});
-    }
-  }
-
-  // useEffect(()=>{
-  //   setTimeout(() => {
-  //     console.log('This message will be logged after 2 seconds.');
-  //   }, 2000);
-  // },[])
-
+  const [{Ambulances,HospitalAmbulances,Hospitals, HospitalName,User},dispatchauth]=useStateValue();
+ 
   const routes = [
     {
       type: "collapse",
@@ -124,7 +67,7 @@ export default function App() {
     },
     {
       type: "collapse",
-      name: "Hospitals",
+      name: "Hospital",
       key: "hospitals",
       icon: <Icon fontSize="small">domain_add</Icon>,
       route: "/hospitals",
@@ -132,7 +75,7 @@ export default function App() {
     },
     {
       type: "collapse",
-      name: "ambulances",
+      name: "Ambulance",
       key: "ambulances",
       icon: <Icon fontSize="small">timelapse</Icon>,
       route: "/ambulances",
@@ -148,7 +91,7 @@ export default function App() {
     },
     {
       type: "collapse",
-      name: "AddHospitals",
+      name: "Add Hospital",
       key: "AddHospitals",
       icon: <Icon fontSize="small">add</Icon>,
       route: "/addHospitals",
@@ -156,7 +99,7 @@ export default function App() {
     },
     {
       type: "collapse",
-      name: "AddAmbulance",
+      name: "Add Ambulance",
       key: "AddAmbulance",
       icon: <Icon fontSize="small">add</Icon>,
       route: "/addambulance",

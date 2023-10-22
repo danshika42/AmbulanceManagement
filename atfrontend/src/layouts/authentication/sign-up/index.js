@@ -57,7 +57,7 @@ function Cover() {
 
   return (
     <CoverLayout image={bgImage}>
-      <Card>
+      <Card className="mt-[80px]">
         <MDBox
           variant="gradient"
           bgColor="info"
@@ -73,7 +73,7 @@ function Cover() {
             Join us today
           </MDTypography>
           <MDTypography display="block" variant="button" color="white" my={1}>
-            Enter your email and password to register
+           
           </MDTypography>
         </MDBox>
          <MDBox pt={4} pb={3} px={3}>

@@ -34,7 +34,7 @@ function DefaultCounterCard({ color, count, title, description,img, ...rest }) {
         </MDTypography>
       )}
       {description && (
-        <MDTypography variant="body2" color="text">
+        <MDTypography style={{fontSize:'0.8rem'}} variant="body2" color="text">
           {description}
         </MDTypography>
       )}

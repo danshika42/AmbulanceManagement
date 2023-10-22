@@ -3,10 +3,9 @@ export const initialState = {
   HospitalName: "",
   Ambulances: [],
   HospitalAmbulances: [],
-  search: "",
-  nameReducer: "",
   AuthToken:{},
   User:{},
+  BookAmbulance:{},
 };
 
 const reducer = (state, action) => {
@@ -41,6 +40,11 @@ const reducer = (state, action) => {
         ...state,
         User: action.User_data,
       };
+    case "ADD_BOOKAMBULANCE":
+      return{
+        ...state,
+        BookAmbulance:action.Book_data,
+      }
     default:
       return state;
   }

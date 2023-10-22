@@ -9,4 +9,5 @@ urlpatterns=[
     path('<pk>/updatehospital/',views.UpdateHospitalList.as_view(),name='updatehospital'),
     path('hospitalambulances/<int:id>',views.GetHospitalAmbulance),
     path('createuser/',views.CreateUser),
+    path('bookambulance/<int:id>',views.BookAmbulance),
 ]

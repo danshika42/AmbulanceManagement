@@ -22,7 +22,7 @@ import MDAvatar from "components/MDAvatar";
 import MDBadge from "components/MDBadge";
 
 // Images
-import team2 from "assets/images/team-2.jpg";
+import team2 from "assets/images/hospital.jpeg";
 import axios from "axios";
 import { useEffect} from "react";
 import { useStateValue } from '../../../ContextProvider/StateContext';
@@ -37,7 +37,12 @@ export default function data(Ambulances) {
       Ambulances_data:data
     })
   }
-
+  function add_book_ambulance(data){
+    dispatch({
+      type:'ADD_BOOKAMBULANCE',
+      Book_data:data
+    })
+  }
   useEffect(()=>{
     async function getAllAmbulance(){
       try{
@@ -50,8 +55,17 @@ export default function data(Ambulances) {
     getAllAmbulance();
   },[]);
 
+  async function getAmbulancesBook(id){
+    try{
+      const book_data= await axios.get(`http://127.0.0.1:8000/bookambulance/${id}`);
+      add_book_ambulance(book_data.data)
+    }catch(error){
+      console.log(error);
+    }
+  }
+
   const Author = ({ image, name, email,id }) => (
-    // <div onClick={()=>getAmbulancesBook(id)}>
+    <div onClick={()=>getAmbulancesBook(id)}>
       <Link to="/ambulancepage/">
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDAvatar src={image} name={name} size="sm" />
@@ -63,7 +77,7 @@ export default function data(Ambulances) {
           </MDBox>
         </MDBox>
      </Link>
-    // </div>
+    </div>
   );
 
   const Job = ({ title, description }) => (
@@ -115,8 +129,6 @@ export default function data(Ambulances) {
       { Header: "Rating", accessor: "function", align: "left" },
       { Header: "Price", accessor: "status", align: "center" },
     ],
-  
-
     rows:rows,
   };
 }

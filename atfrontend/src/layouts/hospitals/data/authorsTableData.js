@@ -22,7 +22,7 @@ import MDAvatar from "components/MDAvatar";
 import MDBadge from "components/MDBadge";
 
 // Images
-import team2 from "assets/images/team-2.jpg";
+import team2 from "assets/images/hospital.jpeg";
 import axios from "axios";
 import { useEffect} from "react";
 import { Link } from "react-router-dom";
